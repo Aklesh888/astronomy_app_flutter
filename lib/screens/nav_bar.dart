@@ -12,14 +12,13 @@ class Navbar extends StatelessWidget {
           const UserAccountsDrawerHeader(
             accountEmail: Text(''),
             accountName: Text(
-              "Astronomy App",
+              "Exploring the cosmos",
               style: TextStyle(fontSize: 30),
             ),
             decoration: BoxDecoration(
                 color: Color.fromARGB(255, 120, 204, 226),
                 image: DecorationImage(
-                    image: AssetImage("assets/wallpaper_2.jpg"),
-                    fit: BoxFit.fill)),
+                    image: AssetImage("assets/splash.png"), fit: BoxFit.fill)),
           ),
           ListTile(
             leading: const Icon(Icons.camera),
@@ -40,6 +39,13 @@ class Navbar extends StatelessWidget {
             title: const Text("Search Images"),
             onTap: () {
               Navigator.of(context).pushNamed("images");
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.circle_outlined),
+            title: const Text("Planets"),
+            onTap: () {
+              Navigator.of(context).pushNamed("planets");
             },
           )
         ],

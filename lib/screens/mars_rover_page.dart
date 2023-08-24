@@ -178,7 +178,8 @@ class _MarsRoverPageState extends State<MarsRoverPage> {
             const SizedBox(height: 10),
             isLoading
                 ? const Center(
-                    child: CircularProgressIndicator(),
+                    child: CircularProgressIndicator(
+                        color: Color.fromARGB(255, 0, 36, 57)),
                   )
                 : marsRoverPhotos.isEmpty
                     ? Padding(
@@ -191,10 +192,18 @@ class _MarsRoverPageState extends State<MarsRoverPage> {
                               padding:
                                   EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
                               child: Center(
-                                child: Text(
-                                  "Sorry, there are no pictures in that sol or camera. Try searching for a different camera or sol.",
-                                  style: TextStyle(fontSize: 16),
-                                  textAlign: TextAlign.center,
+                                child: Column(
+                                  children: [
+                                    Icon(
+                                      Icons.warning,
+                                      size: 50,
+                                    ),
+                                    Text(
+                                      "Sorry, there are no pictures in that sol or camera. Try searching for a different camera or sol.",
+                                      style: TextStyle(fontSize: 16),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),

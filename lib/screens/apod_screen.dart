@@ -71,11 +71,15 @@ class _ApodState extends State<Apod> {
         ),
       ),
       drawer: const Navbar(),
-      body: Column(
+      body: ListView(
         children: [
           isLoading
-              ? const Center(
-                  child: CircularProgressIndicator(),
+              ? const SizedBox(
+                  height: 100,
+                  child: Center(
+                    child: CircularProgressIndicator(
+                        color: Color.fromARGB(255, 0, 36, 57)),
+                  ),
                 )
               : Padding(
                   padding: const EdgeInsets.fromLTRB(2.0, 20.0, 2.0, 10.0),
@@ -117,13 +121,6 @@ class _ApodState extends State<Apod> {
                     ),
                   ),
                 ),
-          const Padding(
-            padding: EdgeInsets.all(12.0),
-            child: Text(
-              "Choose the date of the picture:",
-              style: TextStyle(fontSize: 20),
-            ),
-          ),
           MaterialButton(
             onPressed: _showDatePicker,
             color: const Color.fromARGB(255, 0, 36, 57),

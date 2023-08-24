@@ -13,9 +13,14 @@ class _NasaImagesPageState extends State<NasaImagesPage> {
       []; // List to hold the fetched NASA images
   final TextEditingController _searchController =
       TextEditingController(); // Controller for the search input
+  bool isLoading = false;
 
   // Fetch NASA images using the API
   Future<void> fetchNasaImages({String query = 'galaxy'}) async {
+    setState(() {
+      isLoading = true;
+    });
+
     try {
       final response = await nasaApi.fetchNasaImages(query: query);
       final jsonData = response.data;
@@ -31,8 +36,12 @@ class _NasaImagesPageState extends State<NasaImagesPage> {
             'imageUrl': links['href'], // Use the href from links
           };
         }).toList();
+        isLoading = false;
       });
     } catch (error) {
+      setState(() {
+        isLoading = false;
+      });
       debugPrint(error.toString()); // Handle the error appropriately
     }
   }
@@ -58,56 +67,69 @@ class _NasaImagesPageState extends State<NasaImagesPage> {
               controller: _searchController,
               decoration: InputDecoration(
                 labelText: 'Search',
+                labelStyle: const TextStyle(color: Colors.white),
                 suffixIcon: IconButton(
                   onPressed: () {
                     fetchNasaImages(query: _searchController.text);
                   },
-                  icon: const Icon(Icons.search),
+                  icon: const Icon(
+                    Icons.search,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),
           ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: nasaImages.length,
-              itemBuilder: (context, index) {
-                final image = nasaImages[index];
-                return ClipRRect(
-                  borderRadius: BorderRadius.circular(25),
-                  child: Card(
-                    color: const Color.fromARGB(255, 0, 36, 57),
-                    child: Padding(
-                      padding: const EdgeInsets.all(14.0),
-                      child: Column(
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(25),
-                            child: Image.network(
-                              image['imageUrl'],
-                              width: 300,
+          if (isLoading)
+            const Expanded(
+              child: Center(
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                ),
+              ),
+            )
+          else
+            Expanded(
+              child: ListView.builder(
+                itemCount: nasaImages.length,
+                itemBuilder: (context, index) {
+                  final image = nasaImages[index];
+                  return ClipRRect(
+                    borderRadius: BorderRadius.circular(25),
+                    child: Card(
+                      color: const Color.fromARGB(255, 0, 36, 57),
+                      child: Padding(
+                        padding: const EdgeInsets.all(14.0),
+                        child: Column(
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(25),
+                              child: Image.network(
+                                image['imageUrl'],
+                                width: 300,
+                              ),
                             ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            // maxLines: 5,
-                            image['title'],
-                            style: const TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Text(image['description']),
-                        ],
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              // maxLines: 5,
+                              image['title'],
+                              style: const TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Text(image['description']),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
-          ),
         ],
       ),
     );
